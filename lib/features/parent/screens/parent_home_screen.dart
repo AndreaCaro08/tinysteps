@@ -3,6 +3,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'package:tinysteps/core/constants/app_theme.dart';
 import 'package:tinysteps/core/widgets/bottom_nav_bar.dart';
+import 'package:tinysteps/core/widgets/logout_dialog.dart';
 import 'package:tinysteps/features/parent/screens/my_children_screen.dart';
 import 'package:tinysteps/features/parent/screens/parent_profile_screen.dart';
 import 'package:tinysteps/features/parent/screens/attendance_history_screen.dart';
@@ -92,8 +93,11 @@ class _ParentDashboardState extends State<_ParentDashboard> {
   }
 
   Future<void> _signOut() async {
-    await _supabase.auth.signOut();
-    // GoRouter _SupabaseAuthNotifier handles redirect to /login
+    final confirmed = await showLogoutDialog(context);
+    if (confirmed) {
+      await _supabase.auth.signOut();
+      // GoRouter _SupabaseAuthNotifier handles redirect to /login
+    }
   }
 
   // Maps child status string → avatar color

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tinysteps/core/constants/app_theme.dart';
+import 'package:tinysteps/core/widgets/logout_dialog.dart';
 
 /// Parent Profile (Account) Screen
 class ParentProfileScreen extends StatelessWidget {
@@ -96,8 +97,11 @@ class ParentProfileScreen extends StatelessWidget {
                 width: double.infinity,
                 child: OutlinedButton.icon(
                   onPressed: () async {
-                    await Supabase.instance.client.auth.signOut();
-                    // GoRouter _SupabaseAuthNotifier will redirect to /login
+                    final confirmed = await showLogoutDialog(context);
+                    if (confirmed) {
+                      await Supabase.instance.client.auth.signOut();
+                      // GoRouter _SupabaseAuthNotifier will redirect to /login
+                    }
                   },
                   icon: const Icon(Icons.logout, color: AppColors.danger),
                   label: Text(
